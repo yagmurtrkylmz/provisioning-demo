@@ -263,7 +263,7 @@
     transition:background .18s,box-shadow .18s;}
   .prow:hover{background:#fff;box-shadow:0 0 0 1px var(--g-lt);}
   .prow.on{background:var(--wash);box-shadow:inset 0 0 0 1px rgba(0,184,61,.35);}
-  .prow-orb{position:relative;width:64px;height:64px;flex:0 0 64px;border-radius:.875rem;overflow:hidden;background:#fff;}
+  .prow-orb{position:relative;width:64px;height:64px;flex:0 0 64px;margin-left:-6px;background:transparent;}
   .prow-orb canvas{position:absolute;inset:0;width:100%;height:100%;display:block;}
   .prow-tx{flex:1;min-width:0;}
   .prow-tx b{display:block;font-size:1rem;font-weight:600;color:var(--ink);line-height:1.3;}
@@ -372,10 +372,20 @@
   .sd-sync.pulse{animation:syncpulse .9s var(--ease);}
   @keyframes syncpulse{0%{transform:scale(.9);box-shadow:0 0 0 0 rgba(0,184,61,.35)}60%{transform:scale(1.06);box-shadow:0 0 0 8px rgba(0,184,61,0)}100%{transform:scale(1)}}
 
-  /* customize → regenerate flow: dimmed stage with a spinner, busy button */
+  /* customize → regenerate: a light frost settles over the stage and a quiet white
+     status card narrates the work — no dark box, no bare spinner */
   .sd-regen{position:absolute;inset:0;z-index:4;display:none;place-items:center;
-    background:rgba(2,13,7,.45);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);}
+    background:rgba(234,241,237,.66);backdrop-filter:blur(3px) saturate(1.1);-webkit-backdrop-filter:blur(3px) saturate(1.1);}
   .sdemo.regen .sd-regen{display:grid;}
+  .rg-card{display:inline-flex;align-items:center;gap:12px;background:#fff;border-radius:var(--r-pill);padding:.75rem 1.25rem;
+    box-shadow:0 0 0 1px rgba(0,0,0,.05),0 12px 28px -12px rgba(5,16,11,.18);
+    font-size:.8125rem;font-weight:600;color:var(--ink2);}
+  .rg-dots{display:inline-flex;gap:5px;}
+  .rg-dots i{width:7px;height:7px;border-radius:50%;background:var(--g-dk);animation:rgbounce 1.05s ease-in-out infinite;}
+  .rg-dots i:nth-child(2){animation-delay:.15s;}
+  .rg-dots i:nth-child(3){animation-delay:.3s;}
+  @keyframes rgbounce{0%,100%{transform:translateY(0);opacity:.45}35%{transform:translateY(-5px);opacity:1}}
+  @media (prefers-reduced-motion: reduce){.rg-dots i{animation:none;opacity:1;}}
   .spin{width:22px;height:22px;border-radius:50%;border:2.5px solid rgba(255,255,255,.35);border-top-color:#fff;animation:spin .7s linear infinite;}
   @keyframes spin{to{transform:rotate(360deg)}}
   .btn-primary.busy,.btn-primary.busy:disabled{background:var(--g-dk);color:#fff;cursor:progress;}
@@ -532,7 +542,7 @@
           <canvas class="sd-bgc" id="sd-bgc" aria-hidden="true"></canvas>
           <span class="rays" aria-hidden="true"><i class="r1"></i><i class="r2"></i><i class="r3"></i><i class="r4"></i><i class="r5"></i><i class="r6"></i></span>
           <span class="scrim" aria-hidden="true"></span>
-          <span class="sd-regen" aria-hidden="true"><i class="spin"></i></span>
+          <span class="sd-regen" aria-hidden="true"><span class="rg-card"><span class="rg-dots"><i></i><i></i><i></i></span>Updating your agent…</span></span>
           <canvas class="sd-mesh" id="mesh-demo" aria-hidden="true"></canvas>
           <span class="sd-state" id="sd-state"><span class="sd-sdot"></span><em>Waiting for a call</em></span>
           <p class="sd-greet" data-demo="greet"></p>
