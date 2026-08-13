@@ -21,19 +21,17 @@ no dependencies.
    client-side only, meant to keep casual visitors out, not real security. A correct
    entry is remembered for the browser session (`sessionStorage['prov-gate']`).
    Visitors without a password can book a meeting from the gate (embedded HubSpot
-   calendar).
-2. **Industry picker** — Dental opens the real setup; other industries are placeholders.
-   Deep links: `#dental` skips the picker (used by the landing page popup), `#studio`
-   jumps straight to the studio.
-3. **Agent setup** (view 1) — basic form: business name, agent name, timezone,
+   calendar). After the gate the page opens the dental setup directly; `#studio`
+   deep-links into the studio (the `#dental` hash from the landing popup still works).
+2. **Agent setup** (view 1) — basic form: business name, agent name, timezone,
    confirmations (email is required, validated), greeting, languages. The left panel
    is a live intro: SERENA wordmark, particle-sphere canvas, photo background, and a
    greeting bubble that mirrors the form as you type.
-4. **Agent studio** (view 2) — "Advanced Customization": 8 step panels (Appointments,
+3. **Agent studio** (view 2) — "Advanced Customization": 8 step panels (Appointments,
    Rules, Knowledgebase, Transfers, Call Opening/Closing, Persona, Identity). Every
    change updates the live demo rail on the right. Picking a Persona restyles the
    demo (orb palette + stage colour).
-5. **Live demo rail** — the test agent: canvas particle orb, "Talk to Agent" button,
+4. **Live demo rail** — the test agent: canvas particle orb, "Talk to Agent" button,
    status chips. A test call animates the stage; the real audio is stubbed.
 
 ## Integration points (search for `DEVELOPER HANDOFF` in the script)
