@@ -164,7 +164,7 @@
   /* ================= View 2 · Studio ================= */
   #studio-view{max-width:1180px;margin:0 auto;padding:var(--s-6) var(--s-8) var(--s-8);}
   /* demo rail mirrors the setup visual's width — the live agent is a first-class citizen */
-  .studio-grid{display:grid;grid-template-columns:minmax(0,1fr) 440px;gap:var(--s-6);align-items:start;}
+  .studio-grid{display:grid;grid-template-columns:minmax(0,1fr) 440px;gap:var(--s-6);}
   /* the settings column is chromeless — content sits straight on the white page;
      only the demo box on the right wears the n100 mat */
   .config{min-width:0;}
@@ -257,7 +257,7 @@
   .transfer-opt{margin:0 0 var(--s-5);padding:var(--s-4) var(--s-4) 1px;border-radius:.875rem;background:var(--n50);border:0;}
 
   /* persona — voice picker list: one row per persona (radio-group feel),
-     mini particle orb + trait + play preview + radio; selected = wash + green ring */
+     mini particle orb + trait + radio; selected = wash + green ring */
   .pv-list{display:flex;flex-direction:column;gap:var(--s-3);}
   .prow{display:flex;align-items:center;gap:var(--s-4);padding:var(--s-4) var(--s-5);border-radius:var(--r-lg);background:var(--n50);cursor:pointer;
     transition:background .18s,box-shadow .18s;}
@@ -270,15 +270,6 @@
   .prow-tx b em{font-style:normal;font-weight:500;color:var(--ink3);font-size:.875rem;}
   .prow-tx > span{display:block;font-size:.8125rem;color:var(--ink3);margin-top:3px;line-height:1.5;max-width:64ch;}
   .prow-tx i{font-style:normal;color:var(--ink2);}
-  .prow-listen{width:34px;height:34px;flex:none;border-radius:50%;border:0;background:#122E1C;color:#fff;display:grid;place-items:center;cursor:pointer;
-    transition:background .18s,transform .18s;}
-  .prow-listen:hover{transform:scale(1.08);background:#173A22;}
-  .prow-listen svg{width:14px;height:14px;fill:#fff;}
-  .prow-listen .pl-play{display:block;}
-  .prow-listen .pl-stop{display:none;}
-  .prow.is-live .prow-listen{background:#8C2B21;}
-  .prow.is-live .prow-listen .pl-play{display:none;}
-  .prow.is-live .prow-listen .pl-stop{display:block;}
   .prow-radio{width:22px;height:22px;flex:none;border-radius:50%;background:#fff;box-shadow:inset 0 0 0 2px var(--n300);display:grid;place-items:center;
     transition:background .18s,box-shadow .18s;}
   .prow.on .prow-radio{background:var(--g);box-shadow:none;}
@@ -310,9 +301,12 @@
   .btn-ghost:hover{box-shadow:0 0 0 1px rgba(0,0,0,.14),0 2px 8px 0 rgba(0,0,0,.03);transform:translateY(-1px);}
   .btn-ghost:disabled{opacity:.35;cursor:not-allowed;transform:none;}
 
-  /* ================= Live demo panel (DS pv-panel language) ================= */
-  .demo-rail{position:sticky;top:var(--s-4);z-index:6;}
-  .sdemo{position:relative;background:var(--n100);border:0;border-radius:var(--r-2xl);overflow:hidden;display:flex;flex-direction:column;height:calc(100vh - 3rem);min-height:560px;}
+  /* ================= Live demo panel (DS pv-panel language) =================
+     the rail stretches to the config column's height, so the card's bottom edge
+     stops at the Customize agent row; on columns taller than the viewport the
+     card caps at the viewport and rides sticky inside the rail */
+  .demo-rail{position:relative;z-index:6;}
+  .sdemo{position:sticky;top:var(--s-4);background:var(--n100);border:0;border-radius:var(--r-2xl);overflow:hidden;display:flex;flex-direction:column;height:100%;max-height:calc(100vh - 3rem);min-height:560px;}
   .sd-head{display:flex;justify-content:center;padding:var(--s-3);border-bottom:1px solid var(--hair);}
   .sd-badge{display:inline-flex;align-items:center;gap:var(--s-2);color:var(--ink);font-size:.8125rem;font-weight:600;padding:var(--s-1) var(--s-1);}
   .sd-dot{width:10px;height:10px;border-radius:50%;flex:none;background:radial-gradient(circle at 32% 30%,var(--g-lt),var(--g));}
@@ -400,7 +394,7 @@
     .studio-grid{grid-template-columns:1fr;gap:var(--s-4);}
     .demo-rail{position:static;order:-1;}
     .sd-stage{min-height:420px;}
-    .sdemo{height:auto;min-height:0;}
+    .sdemo{position:static;height:auto;min-height:0;}
     .setup-grid{grid-template-columns:1fr;}
     .setup-visual{min-height:280px;}
     .card-head{padding-top:var(--s-6);}
@@ -487,13 +481,15 @@
     #setup-view .ta{min-height:38px;}
     .setup-visual{min-height:460px;}
   }
-  /* wide setup: the visual panel rides the viewport, independent of form height.
-     It sits on the RIGHT — same side and width as the studio's demo rail, so the
-     eye never has to jump across the page between the two views */
+  /* wide setup: the visual panel stretches WITH the form column, so its bottom
+     edge stops at the Launch agent row instead of running past it. On forms
+     taller than the viewport it caps at the viewport and rides sticky. It sits
+     on the RIGHT — same side and width as the studio's demo rail, so the eye
+     never has to jump across the page between the two views */
   @media (min-width:901px){
     #setup-view{padding-left:var(--s-8);padding-right:var(--s-8);}  /* match #studio-view — panel and demo rail line up 1:1 */
-    .setup-grid{align-items:start;grid-template-columns:minmax(0,1fr) 440px;}
-    .setup-visual{order:2;position:sticky;top:var(--s-6);height:calc(100dvh - 3.5rem);min-height:520px;z-index:6;}
+    .setup-grid{grid-template-columns:minmax(0,1fr) 440px;}  /* align-items:stretch from the base rule */
+    .setup-visual{order:2;position:sticky;top:var(--s-6);max-height:calc(100dvh - 3.5rem);min-height:520px;z-index:6;}
   }
   /* stacked setup (panel above the form): compact band — the greeting mirror
      duplicates the form right below it, so it yields its space to the sphere */
@@ -700,7 +696,22 @@ const STEPS = [
   {key:'identity',   title:'Agent Identity'}
 ];
 
+/* which agent this page instance represents. The landing page passes it into
+   the iframe URL as ?agent=<id> (a bare #dental-style hash still works); the
+   value is kept on state.agentId and mirrored to <body data-agent="…"> so both
+   the config payload and the DOM carry the identifier. */
+const AGENT_ID = (function(){
+  try{
+    const q = new URLSearchParams(location.search).get('agent');
+    if(q) return q.trim().toLowerCase();
+  }catch(e){}
+  const h = (location.hash||'').replace('#','').trim().toLowerCase();
+  return (h && h!=='studio') ? h : 'dental';
+})();
+document.body.dataset.agent = AGENT_ID;
+
 const state = {
+  agentId: AGENT_ID,       // which agent/iframe instance this is (see DEVELOPER HANDOFF)
   view:'setup',            // 'setup' → 'menu' → 'step'
   step:0,
   setup:{ timezone:'America/Los_Angeles', confirmEmail:'', confirmPhone:'' },
@@ -855,16 +866,12 @@ const PERSONAS = [
 ];
 function renderPersona(){
   let h = section('Agent Persona');
-  h += `<p class="sec-sub" style="margin:-8px 0 16px">Pick the voice &amp; personality your agent will use. Press play to hear a preview. The test agent on the right takes on your pick instantly.</p>`;
+  h += `<p class="sec-sub" style="margin:-8px 0 16px">Pick the voice &amp; personality your agent will use. The test agent on the right takes on your pick instantly.</p>`;
   h += `<div class="pv-list" role="radiogroup" aria-label="Agent persona">` + PERSONAS.map((q,qi)=>{
     const on = state.persona===q.name;
     return `<div class="prow ${on?'on':''}" role="radio" aria-checked="${on}" data-action="pick-persona" data-value="${esc(q.name)}">`+
       `<span class="prow-orb" style="background:${q.bg}"><canvas class="prow-c" data-p="${qi}" aria-hidden="true"></canvas></span>`+
       `<span class="prow-tx"><b>${esc(q.name)} <em>&middot; ${esc(q.pair)}</em></b><span>${esc(q.info)} <i>Best for: ${esc(q.use).toLowerCase()}.</i></span></span>`+
-      `<button class="prow-listen" type="button" data-action="listen-persona" aria-label="Preview ${esc(q.name)}">`+
-        `<svg class="pl-play" viewBox="0 0 24 24"><path d="M9.4 7l8 5-8 5z"/></svg>`+
-        `<svg class="pl-stop" viewBox="0 0 24 24"><rect x="7" y="7" width="10" height="10" rx="1.5"/></svg>`+
-      `</button>`+
       `<span class="prow-radio">${on?'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>':''}</span>`+
     `</div>`;
   }).join('') + `</div>`;
@@ -1245,23 +1252,11 @@ document.getElementById('step-content').addEventListener('click', e=>{
     if(it && Array.isArray(it.professionals)) __commitCounts.set(it.professionals, it.professionals.length);
     queueSync(); render(); toast('Saved and added to your agent');
   }
-  else if(a==='listen-persona'){
-    const row=btn.closest('.prow');
-    const was=row.classList.contains('is-live');
-    document.querySelectorAll('.prow.is-live').forEach(r=>r.classList.remove('is-live'));
-    clearTimeout(window.__pListenT);
-    if(!was){
-      row.classList.add('is-live');
-      /* BACKEND HOOK: play this persona's voice sample here */
-      window.__pListenT = setTimeout(()=>row.classList.remove('is-live'), 4200);
-    }
-  }
 });
 
 /* ============================ SERENA ORB (approved 11sight.com painter) ============================ */
 const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-/* persona stage — the particle orb in the persona's colours; is-live (Listen)
-   weaves it into the talking palette with the speech ripple */
+/* persona stage — the particle orb resting in the persona's colours */
 function initPersonaOrbs(){
   document.querySelectorAll('#step-content .prow-c').forEach(function(c){
     const pi=+c.dataset.p;
@@ -1821,17 +1816,20 @@ function startSetupPanel(){
 
 /* ============================ LIVE DEMO PANEL ============================
    DEVELOPER HANDOFF — integration points, in order of wiring:
-   1. pushConfigToBackend(state)  — called (debounced) after every config change.
+   1. state.agentId               — which agent this page instance represents.
+      The landing page passes it into the iframe URL as ?agent=<id> (e.g.
+      ?agent=dental; a bare #dental hash works as a fallback). It is read once
+      at boot, kept on `state.agentId`, mirrored to <body data-agent="…">, and
+      therefore rides in every pushConfigToBackend(state) payload.
+   2. pushConfigToBackend(state)  — called (debounced) after every config change.
       Replace the body with the real provisioning API call; `state` is the full
       config and the single source of truth (same shape as the review/export JSON).
-   2. startCall() / endCall()     — "Talk to Agent" button. Wire to the live
+   3. startCall() / endCall()     — "Talk to Agent" button. Wire to the live
       voice session (WebRTC/streaming). The UI (wave, labels) is already driven
       by the .is-live class on #sd-stage.
-   3. launch-btn                  — first-time provisioning submit (view 1 → 2).
-   4. generate-btn                — full re-provision from the studio: sends the
+   4. launch-btn                  — first-time provisioning submit (view 1 → 2).
+   5. generate-btn                — full re-provision from the studio: sends the
       complete `state` to the provisioning API and refreshes the test agent.
-   5. listen-persona              — persona voice preview: play the persona's
-      sample clip here (UI animates via .is-live on the .prow row).
 ========================================================================== */
 function demoEl(name){ return document.querySelector(`[data-demo="${name}"]`); }
 function demoEls(name){ return document.querySelectorAll(`[data-demo="${name}"]`); }

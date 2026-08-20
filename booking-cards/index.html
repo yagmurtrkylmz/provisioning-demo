@@ -1619,16 +1619,27 @@ function paintParticleOrb(cv, mode, chip, pal){
 })();
 
 /* ---- try-agent modal ----
-   WEBFLOW HOOK: point DEMO_URL at the hosted provisioning page
-   (append #studio to open the Advanced Customization view directly). */
-const DEMO_URL='https://provisioning-demo.vercel.app/sectors/#dental';
+   WEBFLOW HOOK: point DEMO_URL at the hosted provisioning page.
+   The clicked card's data-ind rides into the iframe as ?agent=<id>, so the
+   page inside always knows which agent it was opened for (it lands on
+   state.agentId / <body data-agent> over there). */
+const DEMO_URL='https://provisioning-demo.vercel.app/sectors/';
+function demoSrc(agent){ return DEMO_URL+'?agent='+encodeURIComponent(agent)+'#'+encodeURIComponent(agent); }
 (function(){
   const m=document.getElementById('tryModal'), f=document.getElementById('tmFrame'),
         x=document.getElementById('tmX'), ov=document.getElementById('tmOv');
   let lastTry=null;
-  function show(){ if(!f.src) f.src=DEMO_URL; m.hidden=false; document.body.style.overflow='hidden'; x.focus(); }
+  function show(agent){
+    const url=demoSrc(agent||'dental');
+    if(f.src!==url) f.src=url;   /* same agent → keep the loaded demo; new agent → reload with its id */
+    m.hidden=false; document.body.style.overflow='hidden'; x.focus();
+  }
   function hide(){ m.hidden=true; document.body.style.overflow=''; if(lastTry) lastTry.focus(); }
-  document.querySelectorAll('[data-try]').forEach(function(b){ b.addEventListener('click', function(){ lastTry=b; show(); }); });
+  document.querySelectorAll('[data-try]').forEach(function(b){ b.addEventListener('click', function(){
+    lastTry=b;
+    const card=b.closest('[data-ind]');
+    show(card ? card.getAttribute('data-ind') : 'dental');
+  }); });
   /* closing CTA: ride back up to the hero where the live demo sits */
   var ctaTry=document.getElementById('ctaTry');
   if(ctaTry) ctaTry.addEventListener('click', function(){ scrollTo({top:0, behavior: reduce?'auto':'smooth'}); });

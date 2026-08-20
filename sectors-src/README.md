@@ -22,7 +22,9 @@ no dependencies.
    entry is remembered for the browser session (`sessionStorage['prov-gate']`).
    Visitors without a password can book a meeting from the gate (embedded HubSpot
    calendar). After the gate the page opens the dental setup directly; `#studio`
-   deep-links into the studio (the `#dental` hash from the landing popup still works).
+   deep-links into the studio. The landing popup passes the selected agent in the
+   iframe URL as `?agent=<id>` (e.g. `?agent=dental`; a bare `#dental` hash works
+   as a fallback) — see `state.agentId` below.
 2. **Agent setup** (view 1) — basic form: business name, agent name, timezone,
    confirmations (email is required, validated), greeting, languages. The left panel
    is a live intro: SERENA wordmark, particle-sphere canvas, photo background, and a
@@ -38,6 +40,10 @@ no dependencies.
 
 The UI is done; the backend is stubbed at exactly these seams:
 
+- **`state.agentId`** — which agent this page instance represents. Read once at boot
+  from the iframe URL (`?agent=<id>`, with a bare `#<id>` hash as fallback; defaults
+  to `dental`), mirrored to `<body data-agent="…">`, and included in every
+  `pushConfigToBackend(state)` payload.
 - **`state`** — single source of truth for the whole configuration. Inputs are wired
   via `data-bind` paths; every change funnels through `queueSync()` → `syncDemo()`
   (updates the demo rail) → `pushConfigToBackend(state)` **(stub: send the config to
@@ -46,7 +52,6 @@ The UI is done; the backend is stubbed at exactly these seams:
   voice session here. The entire UI is driven by the `.is-live` class on `#sd-stage`;
   you do not need to touch any animation code.
 - **`launch-btn`** — first-time provisioning submit (setup → studio transition).
-- **Persona preview (`listen-persona`)** — plays a 4.2s stub; wire a real voice sample.
 - **Gate password** — `GATE_PASS` constant in the script. Replace with a real check
   if it ever needs to be more than a demo gate.
 
