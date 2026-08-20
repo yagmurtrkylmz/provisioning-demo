@@ -658,7 +658,7 @@ catch(e){ document.body.classList.add('locked'); }
     <aside class="demo-rail">
       <div class="sdemo">
         <div class="sd-head">
-          <span class="sd-badge"><span class="sd-dot"></span><span data-demo="badge">Serena · Booking Agent</span></span>
+          <span class="sd-badge"><span class="sd-dot"></span><span data-demo="badge">Serena</span></span>
         </div>
         <div class="sd-stage" id="sd-stage">
           <canvas class="sd-bgc" id="sd-bgc" aria-hidden="true"></canvas>
@@ -1840,7 +1840,7 @@ function pushConfigToBackend(cfg){
 
 function syncDemo(){
   const langs = (state.agent.languages||[]).map(l=>(l||'').trim()).filter(Boolean);
-  demoEls('badge').forEach(el=> el.textContent = `${state.agent.name||'Agent'} · Booking Agent`);
+  demoEls('badge').forEach(el=> el.textContent = state.agent.name||'Agent');
   demoEls('name').forEach(el=> el.textContent = state.agent.name||'Agent');
   demoEls('business').forEach(el=> el.textContent = state.agent.businessName||'');
   const txt = (state.opener.greeting||'').trim();
